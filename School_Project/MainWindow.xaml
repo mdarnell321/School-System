@@ -1,0 +1,282 @@
+﻿<Window x:Class="School_Project.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:School_Project"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="793" Width="1181">
+    <Window.Resources>
+        <local:GetModuleType x:Key="getmodule" />
+        <local:GetDueDate x:Key="getdue" />
+        <local:GetEffectiveGrade x:Key="whichgrade" />
+        <local:PercentToLetterGrade x:Key="perctoletter" />
+        <local:TeachToVisibility x:Key="teachtovis" />
+ 
+    </Window.Resources>
+    <Grid Background="Black">
+
+
+        <Viewbox x:Name="Init" Visibility="Hidden">
+            <Grid Height="750" Width="1179">
+                <Grid.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF505050"/>
+                        <GradientStop Color="#FFE0C300" Offset="1"/>
+                    </LinearGradientBrush>
+                </Grid.Background>
+
+                <!-- Login -->
+                <Rectangle HorizontalAlignment="Left" Height="196" Margin="279,163,0,0" Stroke="Black" VerticalAlignment="Top" Width="606" Fill="#FFD2B700"/>
+                <Button x:Name="Reg_Button" Content="Register" Margin="289,293,304,404" Click="Reg_Button_Click"/>
+                <PasswordBox x:Name="Reg_Pass" HorizontalAlignment="Center" Margin="0,247,0,0" VerticalAlignment="Top" Width="472" Password="s"/>
+                <TextBox x:Name="Reg_Email" HorizontalAlignment="Center" Margin="0,224,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="472" Text="s@s.s"/>
+                <Label Content="Email" HorizontalAlignment="Left" Margin="309,220,0,0" VerticalAlignment="Top"/>
+                <Label Content="Password" HorizontalAlignment="Left" Margin="288,243,0,0" VerticalAlignment="Top"/>
+                <Label Content="Register Form" HorizontalAlignment="Left" Margin="547,163,0,0" VerticalAlignment="Top"/>
+                <!-- End Login -->
+
+                <!-- Register -->
+                <Rectangle HorizontalAlignment="Left" Height="196" Margin="279,463,0,0" Stroke="Black" VerticalAlignment="Top" Width="606" Fill="#FFD2B700"/>
+                <Button x:Name="Login_Button" Content="Login" Margin="289,593,304,103" Click="Login_Button_Click"/>
+                <PasswordBox x:Name="Login_Pass" HorizontalAlignment="Center" Margin="0,550,0,0" VerticalAlignment="Top" Width="473" Password="s"/>
+                <TextBox x:Name="Login_Email" HorizontalAlignment="Center" Margin="0,527,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="474" Text="s@s.s"/>
+                <Label Content="Email" HorizontalAlignment="Left" Margin="310,523,0,0" VerticalAlignment="Top"/>
+                <Label Content="Password" HorizontalAlignment="Left" Margin="289,546,0,0" VerticalAlignment="Top"/>
+                <Label Content="Login Form" HorizontalAlignment="Left" Margin="547,463,0,0" VerticalAlignment="Top"/>
+                <PasswordBox x:Name="Reg_Pass_Repeat" HorizontalAlignment="Center" Margin="0,270,0,0" VerticalAlignment="Top" Width="473" Password="s"/>
+                <Label Content="Repeat Pass" HorizontalAlignment="Left" Margin="290,266,0,0" VerticalAlignment="Top" Width="110" FontSize="9"/>
+                <TextBox x:Name="Reg_First" HorizontalAlignment="Left" Margin="353,201,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="206" Text="s"/>
+                <Label Content="Name" HorizontalAlignment="Left" Margin="306,197,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="Reg_Last" HorizontalAlignment="Left" Margin="564,201,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="206" Text="s"/>
+                <CheckBox x:Name="Reg_Imteacher" Margin="782,201,294,531" Content="I am a teacher"  />
+                <!-- End Register -->
+
+            </Grid>
+        </Viewbox>
+
+        <Viewbox x:Name="Loading" Visibility="Hidden">
+            <Grid Height="750" Width="1179" Background="Black" Opacity="0.4">
+                <TextBlock Text="Loading" Foreground="White" FontSize="20" TextAlignment="Center" />
+            </Grid>
+        </Viewbox>
+
+        <Viewbox x:Name="Main" Visibility="Visible">
+            <Grid Height="750" Width="1179">
+                <Grid.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF505050"/>
+                        <GradientStop Color="#FFE0C300" Offset="1"/>
+                    </LinearGradientBrush>
+                </Grid.Background>
+
+                <ScrollViewer  Margin="0,0,1013,59" IsTabStop="True" VerticalScrollBarVisibility="Auto" CanContentScroll="True" >
+                    <ListView x:Name="My_Courses" SelectionChanged="My_Courses_SelectionChanged" ScrollViewer.VerticalScrollBarVisibility="Disabled" VerticalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False" Height="681" Background="#FF373737"  BorderBrush="{x:Null}">
+                        <ListBox.ItemTemplate >
+                            <DataTemplate>
+                                <TextBlock Text="{Binding [1]}" FontSize="12" VerticalAlignment="Center" Foreground="White"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListView>
+
+                </ScrollViewer>
+                <Button x:Name="Home_Button" Margin="0,691,1013,10" Click="Home_Button_Click" Content="Home" />
+                <Grid x:Name="Overview_Window" Visibility="Visible">
+
+                    <Grid x:Name="student_section_main" Visibility="Hidden">
+                        <ScrollViewer Margin="280,105,542,143" IsTabStop="True" VerticalScrollBarVisibility="Auto" CanContentScroll="True" FontStyle="Italic" >
+                            <ListView x:Name="Courses_Taken" SelectionChanged="Courses_Taken_SelectionChanged" ScrollViewer.VerticalScrollBarVisibility="Disabled" VerticalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False" Height="502" Background="#FF373737"  BorderBrush="Black">
+                                <ListBox.ItemTemplate >
+                                    <DataTemplate>
+                                        <Grid Visibility="{Binding Visible}" >
+                                            <TextBlock Text="{Binding [1]}" FontSize="12" VerticalAlignment="Center" Foreground="White"/>
+                                            <TextBlock Text="{Binding Converter={StaticResource perctoletter}}" FontSize="12" HorizontalAlignment="Right" Foreground="#FFFFEA00" FontStyle="Italic" Margin="0,0,0,0" Padding="330,0,0,0"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListView>
+                        </ScrollViewer>
+                        <Label Content="Finished Courses" HorizontalAlignment="Left" Margin="280,66,0,0" VerticalAlignment="Top" Width="357" Foreground="White" FontSize="22"/>
+                        <Label Content="Your Info" HorizontalAlignment="Left" Margin="717,66,0,0" VerticalAlignment="Top" Width="357" Foreground="White" FontSize="22"/>
+                        <Rectangle HorizontalAlignment="Left" Height="269" Margin="715,106,0,0" Stroke="Black" VerticalAlignment="Top" Width="352" Fill="#FF373737"/>
+                        <TextBlock x:Name="my_info" Text="undefined" HorizontalAlignment="Left" Margin="724,114,0,0" VerticalAlignment="Top" Foreground="White" Height="248" Width="330"/>
+                        <Button x:Name="Enroll_Courses" Content="Enroll In Course" HorizontalAlignment="Left" Margin="280,607,0,0" VerticalAlignment="Top" Height="44" Width="357" Visibility="Visible" Click="Enroll_Courses_Click"/>
+                    </Grid>
+
+                    <Button x:Name="Teach_Courses" Content="Teach A Course" HorizontalAlignment="Left" Margin="812,696,0,0" VerticalAlignment="Top" Height="44" Width="357" Visibility="Hidden" Click="Enroll_Courses_Click"/>
+                    <TextBlock x:Name="welcome" Text="Welcome undefined" HorizontalAlignment="Left" Margin="168,0,0,0" VerticalAlignment="Top" Width="357" Foreground="White" FontSize="22" FontStyle="Italic"/>
+
+                </Grid>
+
+                <Grid x:Name="Module_Window" Visibility="Visible">
+
+                    <ScrollViewer Margin="280,44,107,10" IsTabStop="True" VerticalScrollBarVisibility="Auto" CanContentScroll="True" >
+                        <ListView x:Name="Modules" SelectionChanged="Modules_SelectionChanged" ScrollViewer.VerticalScrollBarVisibility="Disabled" VerticalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False" Height="696" Background="#FF373737"  BorderBrush="{x:Null}">
+                            <ListBox.ItemTemplate >
+                                <DataTemplate>
+                                    <Grid Visibility="{Binding Visible}" >
+                                       
+                                        <TextBlock Text="{Binding Converter={StaticResource whichgrade}}" FontSize="12" HorizontalAlignment="Right" Foreground="#FFFFEA00" FontStyle="Italic" Margin="0,0,0,0" Padding="680,0,0,0"/>
+                                        <StackPanel Orientation="Horizontal" Visibility="{Binding Visible}" >
+                                            <Button Content ="Delete" Height="20" Width="50" Click="DeleteModule_Click" Visibility="{Binding Source={x:Static local:User.is_teaching_class} ,Converter={StaticResource teachtovis}}"/>
+                                            <TextBlock Text="{Binding Converter={StaticResource getmodule}}" FontSize="12" VerticalAlignment="Center" Foreground="#FF00FF90" FontStyle="Italic" TextDecorations="Underline"/>
+                                            <TextBlock Text="{Binding Converter={StaticResource getdue}}" FontSize="12" VerticalAlignment="Center" Foreground="#FF00B3FF" FontStyle="Italic" TextDecorations="Underline"/>
+                                            <TextBlock Text="{Binding [1]}" FontSize="12" VerticalAlignment="Center" Foreground="White"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListView>
+                    </ScrollViewer>
+                    <Button x:Name="Create_Module_Button" Content="Create Module" HorizontalAlignment="Left" Margin="280,19,0,0" VerticalAlignment="Top" Width="792" Click="Create_Module_Button_Click" Visibility="Hidden"/>
+                    <Grid x:Name="Grade_Panel" Visibility="Hidden">
+                        <Rectangle HorizontalAlignment="Left" Height="179" Margin="180,39,0,0" Stroke="Black" VerticalAlignment="Top" Width="100" Fill="#FF797979"/>
+                        <TextBlock x:Name="Class_Grade_Text" HorizontalAlignment="Left" Margin="181,41,0,0" TextWrapping="Wrap" Text="Grade: 100%" VerticalAlignment="Top" Height="23" Width="99" Foreground="White" TextAlignment="Center"/>
+                        <TextBlock x:Name="Class_Grade_Letter" HorizontalAlignment="Left" Margin="180,64,0,0" TextWrapping="Wrap" Text="A+" VerticalAlignment="Top" Height="76" Width="99" TextAlignment="Center" Foreground="#FF6F0101" FontSize="36"/>
+                    </Grid>
+                </Grid>
+
+                <Grid x:Name="Module_Opened_Window" Visibility="Hidden">
+                    <Rectangle Margin="280,44,107,10" Fill="#FF373737"/>
+                    <TextBlock x:Name="Module_Title" Text="Undefined" HorizontalAlignment="Left" Margin="297,56,0,0" VerticalAlignment="Top" Foreground="White" Width="758" FontSize="18"/>
+                    <RichTextBox VerticalScrollBarVisibility="Visible" x:Name="Module_Des" Margin="297,85,124,79" Foreground="White" Background="{x:Null}" />
+                    <Button x:Name="GoBackModule_Button" Content="&lt;-" HorizontalAlignment="Left" Margin="1024,44,0,0" VerticalAlignment="Top" Width="48" Click="GoBackModule_Button_Click"/>
+                    <Button x:Name="TakeExam_Button" Content="Take Exam" HorizontalAlignment="Left" Margin="297,676,0,0" VerticalAlignment="Top" Height="53" Width="758" Click="TakeExam_Button_Click"/>
+                    <Button x:Name="DoHW_Button" Content="Start Assignment" HorizontalAlignment="Left" Margin="297,676,0,0" VerticalAlignment="Top" Height="53" Width="758" Click="DOHW_Button_Click"/>
+                    <Button x:Name="GradeHW_Button" Content="Grade Submissions" HorizontalAlignment="Left" Margin="297,676,0,0" VerticalAlignment="Top" Height="53" Width="758" Click="GradeHW_Button_Click"/>
+                </Grid>
+
+                <Grid x:Name="Grading_Window" Visibility="Hidden">
+                    <Rectangle Margin="280,44,107,10" Fill="#FF373737" Stroke="Black"/>
+                    <TextBlock x:Name="Grading_Who" Text="Undefined's Submission For Undefined" HorizontalAlignment="Left" Margin="297,56,0,0" VerticalAlignment="Top" Foreground="White" Width="758" FontSize="18"/>
+                    <Button Content="&lt;-" HorizontalAlignment="Left" Margin="1024,44,0,0" VerticalAlignment="Top" Width="48" Click="GoBackModule_Button_Click"/>
+                    <TextBlock x:Name="Grading_Field" HorizontalAlignment="Left" Margin="297,117,0,0" TextWrapping="Wrap" Text="undefined" VerticalAlignment="Top" Foreground="White" Height="455" Width="729" Background="#FF2F2F2F"/>
+                    <TextBox x:Name="Grade_inp" HorizontalAlignment="Left" Margin="602,585,0,0" TextWrapping="Wrap" Text="100" VerticalAlignment="Top" Width="54" Height="38" FontWeight="Bold" FontSize="24" Background="#FF2F2F2F" Foreground="White" BorderBrush="Black"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="662,585,0,0" TextWrapping="Wrap" Text="%" VerticalAlignment="Top" Height="38" Width="50" FontSize="24" Foreground="White"/>
+                    <Button x:Name="Submit_grade" Content="Submit Grade" HorizontalAlignment="Left" Margin="297,646,0,0" VerticalAlignment="Top" Height="69" Width="729" Click="Submit_grade_Click"/>
+
+                </Grid>
+
+
+                <Grid x:Name="User_HW_List" Visibility="Hidden">
+                    <Rectangle Margin="280,44,107,10" Fill="#FF373737" Stroke="Black"/>
+                    <Button Content="&lt;-" HorizontalAlignment="Left" Margin="1024,44,0,0" VerticalAlignment="Top" Width="48" Click="GoBackModule_Button_Click"/>
+                    <TextBlock x:Name="People_Title" Text="Assignment Grading" HorizontalAlignment="Left" Margin="297,56,0,0" VerticalAlignment="Top" Foreground="White" Width="758" FontSize="18"/>
+                    <ScrollViewer Margin="336,119,176,75" IsTabStop="True" VerticalScrollBarVisibility="Auto" CanContentScroll="True" >
+                        <ListView x:Name="HWPeople" SelectionChanged="HWPeople_SelectionChanged" ScrollViewer.VerticalScrollBarVisibility="Disabled" VerticalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False" Height="556" Background="#FF676767"  BorderBrush="Black">
+                            <ListBox.ItemTemplate >
+                                <DataTemplate>
+                                    <Grid >
+                                        <TextBlock Text="{Binding [0]}" FontSize="12" Foreground="White"/>
+                                        <TextBlock Text="{Binding [4]}" FontSize="12" HorizontalAlignment="Right" Foreground="#FFFFEA00" FontStyle="Italic" Margin="0,0,0,0" Padding="600,0,0,0"/>
+                                    </Grid>
+
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListView>
+                    </ScrollViewer>
+
+
+                </Grid>
+                <Grid x:Name="Exam_Window" Visibility="Hidden">
+                    <Rectangle Margin="280,44,107,10" Fill="#FF373737"/>
+                    <Button x:Name="SubmitTest_Button" Content="Submit Exam" HorizontalAlignment="Left" Margin="927,44,0,0" VerticalAlignment="Top" Width="135" Click="SubmitTest_Button_Click"/>
+                    <ListBox x:Name="ExamQuestions" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="927,69,117,19" Background="#FF5A5A5A" Foreground="White" BorderBrush="Black" SelectionChanged="ExamQuestions_SelectionChanged"/>
+                    <TextBlock x:Name="ExamQuestion" HorizontalAlignment="Left" Margin="322,69,0,0" TextWrapping="Wrap" Text="Undefined" VerticalAlignment="Top" Height="117" Width="590" Foreground="White"/>
+
+                    <ListBox x:Name="ExamQuestionBank" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="322,201,267,19" Background="{x:Null}" Foreground="White" BorderBrush="Black" SelectionChanged="ExamQuestionBank_SelectionChanged"/>
+                    <TextBlock x:Name="ExamTimer" HorizontalAlignment="Left" Margin="322,48,0,0" TextWrapping="Wrap" Text="10:00" VerticalAlignment="Top" Foreground="White"/>
+                </Grid>
+
+                <Grid x:Name="Assignment_Window" Visibility="Hidden">
+                    <Rectangle Margin="280,124,255,122" Fill="#FF717171"/>
+                    <Grid Height="750" Width="1179" Background="Black" Opacity="0.4" MouseDown="CloseAllSecondaryWindows">
+                    </Grid>
+                    <TextBox x:Name="HW_Answer" Margin="297,308,270,174" Background="#FFC7C7C7" />
+                    <TextBlock x:Name="HW_Question" HorizontalAlignment="Left" Margin="297,178,0,0" TextWrapping="Wrap" Text="Question" VerticalAlignment="Top" Foreground="White" Height="125" Width="612"/>
+                    <Button x:Name="SubmitHW_Button" Content="Submit" HorizontalAlignment="Left" Margin="822,134,0,0" VerticalAlignment="Top" Width="87" Click="SubmitHW_Button_Click"/>
+                </Grid>
+
+
+            </Grid>
+        </Viewbox>
+
+        <Viewbox x:Name="View_Catalog" Visibility="Hidden">
+            <Grid Height="750" Width="1179">
+                <Rectangle HorizontalAlignment="Center" Height="508" Stroke="Black" VerticalAlignment="Center" Width="677" Fill="White" Margin="1,0,0,0"/>
+                <Grid Height="750" Width="1179" Background="Black" Opacity="0.4" MouseDown="CloseAllWindows"/>
+                <TextBlock x:Name="Catalog_Description" HorizontalAlignment="Left" Margin="521,213,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="188" Width="389"/>
+
+                <ScrollViewer Margin="272,213,680,142" IsTabStop="True" VerticalScrollBarVisibility="Auto" CanContentScroll="True" >
+                    <ListView x:Name="All_Courses" SelectionChanged="All_Courses_SelectionChanged" ScrollViewer.VerticalScrollBarVisibility="Disabled" VerticalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False" Height="385" Background="#FF373737"  BorderBrush="{x:Null}">
+                        <ListBox.ItemTemplate >
+                            <DataTemplate>
+                                <TextBlock Text="{Binding [0]}" FontSize="12" VerticalAlignment="Center" Foreground="White"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListView>
+                </ScrollViewer>
+                <Button x:Name="Enroll_In" Content="Join" HorizontalAlignment="Left" Margin="759,576,0,0" VerticalAlignment="Top" Height="32" Width="151" Click="Enroll_In_Click"/>
+            </Grid>
+        </Viewbox>
+
+        <Viewbox x:Name="Create_Module" Visibility="Hidden">
+            <Grid Height="750" Width="1179">
+
+                <Rectangle HorizontalAlignment="Center" Height="508" Stroke="Black" VerticalAlignment="Center" Width="677" Fill="White" Margin="1,0,0,0"/>
+                <Grid Height="750" Width="1179" Background="Black" Opacity="0.4" MouseDown="CloseAllWindows"/>
+                <Button Margin="284,555,283,135" Content="Create Module" Click="CreateModule_Click" />
+
+                <TextBox x:Name="CreateModule_Name" Margin="284,159,283,573" />
+                <RichTextBox x:Name="CreateModule_Des" Margin="284,205,283,266" />
+                <Label Content="Module Name" HorizontalAlignment="Left" Margin="284,133,0,0" VerticalAlignment="Top"/>
+                <Label Content="Description" HorizontalAlignment="Left" Margin="284,179,0,0" VerticalAlignment="Top"/>
+                <Button Margin="284,510,589,195" Content="Add Exam" Click="AddExamToModule_Click" />
+                <Button Margin="590,510,283,195" Content="Add Assignment" Click="AddHWToModule_Click" />
+                <RadioButton x:Name="CreateModule_HasExam" Content="Has Exam" HorizontalAlignment="Left" Margin="284,490,0,0" VerticalAlignment="Top" IsChecked="False" IsEnabled="False"/>
+                <RadioButton x:Name="CreateModule_HasHW" Content="Has Assignment" HorizontalAlignment="Left" Margin="590,490,0,0" VerticalAlignment="Top" IsChecked="False" IsEnabled="False"/>
+
+                <Grid x:Name="Assignment_Creator" Visibility="Hidden">
+                    <Rectangle Margin="280,124,255,122" Fill="#FF373737"/>
+                    <Grid Height="750" Width="1179" Background="Black" Opacity="0.4" MouseDown="CloseAllSecondaryWindows">
+                    </Grid>
+                    <Label Content="Due" HorizontalAlignment="Left" Margin="292,130,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <DatePicker x:Name="CreateHW_DueDate" HorizontalAlignment="Left" Margin="397,130,0,0" VerticalAlignment="Top" SelectedDateFormat="Long"/>
+                    <Label Content="@ 11:59 PM" HorizontalAlignment="Left" Margin="323,130,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <TextBox x:Name="CreateHW_Question" Margin="297,187,270,174" Background="#FFC7C7C7" />
+                    <TextBlock HorizontalAlignment="Left" Margin="298,169,0,0" TextWrapping="Wrap" Text="Question" VerticalAlignment="Top" Foreground="White"/>
+                    <Button x:Name="DiscardHW_Button" Content="Discard" HorizontalAlignment="Left" Margin="822,154,0,0" VerticalAlignment="Top" Width="87" Click="DiscardHW_Button_Click"/>
+                </Grid>
+                <Grid x:Name="Exam_Creator" Visibility="Hidden">
+                    <Rectangle Margin="280,44,107,10" Fill="#FF373737"/>
+                    <Grid Height="750" Width="1179" Background="Black" Opacity="0.4" MouseDown="CloseAllSecondaryWindows"/>
+                    <Label Content="Due" HorizontalAlignment="Left" Margin="623,42,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <ListBox x:Name="CreateExam_Questions" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="927,69,117,39" Background="#FF5A5A5A" Foreground="White" BorderBrush="Black" SelectionChanged="CreateExam_Questions_SelectionChanged"/>
+                    <TextBox x:Name="CreateExam_QInput" HorizontalAlignment="Left" Margin="314,69,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="117" Width="598" TextChanged="CreateExam_QInput_TextChanged"/>
+                    <TextBox x:Name="CreateExam_DInput" HorizontalAlignment="Left" Margin="314,203,0,0" AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Top" Height="528" Width="598" TextChanged="CreateExam_DInput_TextChanged"/>
+                    <Button x:Name="AddQuestion_Button" Content="Add Question" HorizontalAlignment="Left" Margin="927,711,0,0" VerticalAlignment="Top" Width="135" Click="AddQuestion_Button_Click"/>
+                    <TextBlock x:Name="CreateExam_Time" HorizontalAlignment="Left" Margin="314,49,0,0" TextWrapping="Wrap" Text="10:00" VerticalAlignment="Top" Foreground="White"/>
+                    <Button x:Name="CreateExam_AddTime" Content="^" HorizontalAlignment="Left" Margin="347,43,0,0" VerticalAlignment="Top" Height="14" Width="16" Click="CreateExam_AddTime_Click"/>
+                    <Button x:Name="CreateExam_DecreaseTime" Content="^" HorizontalAlignment="Left" Margin="347,56,0,0" VerticalAlignment="Top" Height="13" Width="16" RenderTransformOrigin="0.5,0.5" Click="CreateExam_DecreaseTime_Click">
+                        <Button.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform AngleX="0.199"/>
+                                <RotateTransform Angle="-179.551"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Button.RenderTransform>
+                    </Button>
+                    <DatePicker x:Name="CreateExam_DueDate" HorizontalAlignment="Left" Margin="728,42,0,0" VerticalAlignment="Top" SelectedDateFormat="Long"/>
+                    <Label Content="@ 11:59 PM" HorizontalAlignment="Left" Margin="654,42,0,0" VerticalAlignment="Top" Foreground="White"/>
+                    <Button x:Name="CreateExam_Discard" Content="Discard Exam" HorizontalAlignment="Left" Margin="927,49,0,0" VerticalAlignment="Top" Width="135" Click="DiscardExam_Button_Click"/>
+
+                </Grid>
+
+
+            </Grid>
+
+
+        </Viewbox>
+    </Grid>
+</Window>
